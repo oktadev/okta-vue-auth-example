@@ -1,54 +1,64 @@
 <template>
   <div id="app">
-    <header>
-      <span>Vue.js PWA</span>
-    </header>
-    <main>
-      <img src="./assets/logo.png" alt="Vue.js PWA">
+    <h1>Auth Flow</h1>
+    <ul>
+      <li>
+        <router-link v-if="loggedIn" to="/logout">Log out</router-link>
+        <router-link v-if="!loggedIn" to="/login">Log in</router-link>
+      </li>
+      <li>
+        <router-link to="/about">About</router-link>
+      </li>
+      <li>
+        <router-link to="/dashboard">Dashboard</router-link>
+        (authenticated)
+      </li>
+    </ul>
+    <template v-if="$route.matched.length">
       <router-view></router-view>
-    </main>
+    </template>
+    <template v-else>
+      <p>You are logged {{ loggedIn ? 'in' : 'out' }}</p>
+    </template>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app'
-}
+  import auth from './auth'
+  export default {
+    data () {
+      return {
+        loggedIn: auth.loggedIn()
+      }
+    },
+    created () {
+      auth.onChange = loggedIn => {
+        this.loggedIn = loggedIn
+      }
+    }
+  }
 </script>
-
 <style>
-body {
-  margin: 0;
-}
+  html, body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    color: #2c3e50;
+  }
 
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-}
+  #app {
+    padding: 0 20px;
+  }
 
-main {
-  text-align: center;
-  margin-top: 40px;
-}
+  ul {
+    line-height: 1.5em;
+    padding-left: 1.5em;
+  }
 
-header {
-  margin: 0;
-  height: 56px;
-  padding: 0 16px 0 24px;
-  background-color: #35495E;
-  color: #ffffff;
-}
+  a {
+    color: #7f8c8d;
+    text-decoration: none;
+  }
 
-header span {
-  display: block;
-  position: relative;
-  font-size: 20px;
-  line-height: 1;
-  letter-spacing: .02em;
-  font-weight: 400;
-  box-sizing: border-box;
-  padding-top: 16px;
-}
+  a:hover {
+    color: #4fc08d;
+  }
 </style>
