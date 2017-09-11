@@ -1,4 +1,6 @@
 /* globals localStorage */
+var OktaAuth = require('@okta/okta-auth-js')
+var authClient = new OktaAuth({url: 'https://dev-158606.oktapreview.com'})
 
 export default {
   login (email, pass, cb) {
@@ -8,15 +10,28 @@ export default {
       this.onChange(true)
       return
     }
-    pretendRequest(email, pass, (res) => {
-      if (res.authenticated) {
-        localStorage.token = res.token
-        if (cb) cb(true)
-        this.onChange(true)
-      } else {
-        if (cb) cb(false)
-        this.onChange(false)
+    return authClient.signIn({
+      username: email,
+      password: pass
+    }).then(response => {
+      if (response.status === 'SUCCESS') {
+        return authClient.token.getWithoutPrompt({
+          clientId: 'MjlYvTtFW26gOoOAHKOz',
+          responseType: ['id_token', 'token'],
+          scopes: ['openid', 'email', 'profile'],
+          sessionToken: response.sessionToken,
+          redirectUri: 'http://localhost:8080'
+        }).then(tokens => {
+          localStorage.token = tokens[1].accessToken
+          localStorage.idToken = tokens[0].idToken
+          if (cb) cb(true)
+          this.onChange(true)
+        })
       }
+    }).fail(err => {
+      console.error(err.message)
+      if (cb) cb(false)
+      this.onChange(false)
     })
   },
 
@@ -24,28 +39,30 @@ export default {
     return localStorage.token
   },
 
+  getName () {
+    const claims = this.parseJwt(localStorage.idToken)
+    // console.jwt(localStorage.idToken)
+    return claims['name']
+  },
+
+  parseJwt (token) {
+    const base64Url = token.split('.')[1]
+    const base64 = base64Url.replace('-', '+').replace('_', '/')
+    return JSON.parse(window.atob(base64))
+  },
+
   logout (cb) {
     delete localStorage.token
+    delete localStorage.idToken
     if (cb) cb()
     this.onChange(false)
+    return authClient.signOut()
   },
 
   loggedIn () {
     return !!localStorage.token
   },
 
-  onChange () {}
-}
-
-function pretendRequest (email, pass, cb) {
-  setTimeout(() => {
-    if (email === 'joe@example.com' && pass === 'password1') {
-      cb({
-        authenticated: true,
-        token: Math.random().toString(36).substring(7)
-      })
-    } else {
-      cb({ authenticated: false })
-    }
-  }, 0)
+  onChange () {
+  }
 }

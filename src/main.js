@@ -8,6 +8,14 @@ import App from './App'
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 
+Vue.directive('focus', {
+  // When the bound element is inserted into the DOM...
+  inserted: function (el) {
+    // Focus the element
+    el.focus()
+  }
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
