@@ -30,7 +30,7 @@ This will get a copy of the project installed locally, install all of its depend
 
 You’ll need to create an OIDC App in Okta to get a `{clientId}`. To do this, log in to your Okta Developer account, or [create one](https://developer.okta.com/signup/) if you don't have one.  Navigate to **Applications** > **Add Application**. Click **SPA** and click the **Next** button. Give the app a name you’ll remember, and specify `http://localhost:8080` as a Base URI and Login Redirect URI.
 
-<img src="https://developer.okta.com/assets/blog/vue-auth-sdk/oidc-settings-d4d35063103b8a2f5dff3290a8b7bc6190854f07c78b192019b9ca1143c25e98.png" alt="OIDC Settings" width="600"/>
+<img src="https://developer.okta.com/assets/blog/vue-auth-sdk/oidc-settings-d4d35063103b8a2f5dff3290a8b7bc6190854f07c78b192019b9ca1143c25e98.png" alt="OIDC Settings" width="700"/>
 
 Click **Done** and you’ll be shown a screen with this information as well as a Client ID at the bottom. Set `{yourOktaDomain}` and copy the Client ID into `src/auth.js`.
 
