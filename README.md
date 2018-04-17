@@ -18,7 +18,7 @@ Please read [The Lazy Developer's Guide to Authentication with Vue.js](https://d
 To install this example application, run the following commands:
 
 ```bash
-git clone git@github.com:oktadeveloper/okta-vue-auth-example.git
+git clone https://github.com/oktadeveloper/okta-vue-auth-example.git
 cd okta-vue-auth-example
 npm install
 npm start
