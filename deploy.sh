@@ -1,4 +1,3 @@
-sed -i -e "s|http://localhost:8080|https://vue-auth-pwa.cfapps.io|g" src/auth.js
 npm run build
 cd dist
 touch Staticfile

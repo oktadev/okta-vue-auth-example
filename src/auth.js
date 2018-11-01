@@ -20,7 +20,7 @@ export default {
           responseType: ['id_token', 'token'],
           scopes: ['openid', 'email', 'profile'],
           sessionToken: response.sessionToken,
-          redirectUri: 'http://localhost:8080'
+          redirectUri: window.location.origin
         }).then(tokens => {
           localStorage.token = tokens[1].accessToken
           localStorage.idToken = tokens[0].idToken
